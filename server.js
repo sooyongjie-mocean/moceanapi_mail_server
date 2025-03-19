@@ -24,10 +24,19 @@ app.listen(PORT, () => {
 
 // Contact form endpoint
 app.post("/api/contact", async (req, res) => {
-  const { name, email, phone, country, message, turnstileToken } = req.body;
+  const { name, email, subject, phone, country, message, turnstileToken } =
+    req.body;
 
   // Basic validation
-  if (!name || !email || !country || !phone || !message || !turnstileToken) {
+  if (
+    !name ||
+    !email ||
+    !subject ||
+    !country ||
+    !phone ||
+    !message ||
+    !turnstileToken
+  ) {
     return res.status(400).json({ message: "Missing required fields" });
   }
 
@@ -68,8 +77,10 @@ app.post("/api/contact", async (req, res) => {
     const mailOptions = {
       from: process.env.SMTP_FROM_EMAIL,
       to: process.env.CONTACT_EMAIL,
-      subject: `MoceanAPI Landing 🇵🇭: New Submission from ${name}`,
+      subject: `[moceanapi.ph Enquiry] ${subject} - ${name}`,
       text: `
+
+        Settings:
           Name: ${name}
           Email: ${email}
           Phone: ${phone}
